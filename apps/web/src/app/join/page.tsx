@@ -45,7 +45,7 @@ export default function JoinPage() {
           return;
         }
 
-        router.push(`/room/${response.roomCode}?nickname=${encodeURIComponent(nickname)}`);
+        router.push(`/room?code=${response.roomCode}&nickname=${encodeURIComponent(nickname)}`);
       }
     );
   }

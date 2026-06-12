@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { CSSProperties, useEffect, useMemo, useRef, useState } from "react";
-import { useParams } from "next/navigation";
 import { io, Socket } from "socket.io-client";
 
 type ParticipantRole = "davaci" | "davali" | "davaci_avukati" | "davali_avukati" | "spectator" | "jury";
@@ -127,7 +126,6 @@ const phaseLabels: Record<RoomPhase, string> = {
 };
 
 export default function RoomPage() {
-  const params = useParams<{ roomCode: string }>();
   const socketRef = useRef<Socket | null>(null);
   const [nickname, setNickname] = useState("Misafir");
   const [participants, setParticipants] = useState<RoomParticipant[]>([]);
@@ -150,7 +148,7 @@ export default function RoomPage() {
   const [laneShownUntil, setLaneShownUntil] = useState<Record<string, number>>({});
   const [nowMs, setNowMs] = useState(() => Date.now());
   const chatLogRef = useRef<HTMLDivElement | null>(null);
-  const roomCode = (params?.roomCode || "----").toUpperCase();
+  const [roomCode, setRoomCode] = useState("----");
 
   const currentParticipant = useMemo(
     () => participants.find((participant) => participant.nickname === nickname),
@@ -175,18 +173,20 @@ export default function RoomPage() {
   }, [messages]);
 
   useEffect(() => {
-    const nickFromQuery = new URLSearchParams(window.location.search).get("nickname");
-    const safeNickname = nickFromQuery || "Misafir";
+    const query = new URLSearchParams(window.location.search);
+    const safeNickname = query.get("nickname") || "Misafir";
+    const code = (query.get("code") || "----").toUpperCase();
     setNickname(safeNickname);
+    setRoomCode(code);
 
     const gameServerUrl = process.env.NEXT_PUBLIC_GAME_SERVER_URL || "http://localhost:3100";
     const socket = io(`${gameServerUrl}/game`, { transports: ["websocket"] });
     socketRef.current = socket;
 
-    socket.emit("client:joinRoom", { nickname: safeNickname, roomCode });
+    socket.emit("client:joinRoom", { nickname: safeNickname, roomCode: code });
 
     socket.on("server:roomState", (payload: RoomStatePayload) => {
-      if (payload.room.code === roomCode) {
+      if (payload.room.code === code) {
         setParticipants(payload.room.participants);
         setPhase(payload.room.phase || "lobby");
         setClaimSummary(payload.room.claimSummary || "");
@@ -231,7 +231,7 @@ export default function RoomPage() {
       socketRef.current = null;
       socket.disconnect();
     };
-  }, [roomCode]);
+  }, []);
 
   useEffect(() => {
     if (!phaseEndsAt) {

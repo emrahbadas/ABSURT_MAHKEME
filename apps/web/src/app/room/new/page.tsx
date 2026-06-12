@@ -97,7 +97,7 @@ export default function NewRoomPage() {
     if (!roomCode) {
       return;
     }
-    router.push(`/room/${roomCode}?nickname=${encodeURIComponent(nickname)}`);
+    router.push(`/room?code=${roomCode}&nickname=${encodeURIComponent(nickname)}`);
   }
 
   const timeoutOptions: Array<{ label: string; value: number | null }> = [

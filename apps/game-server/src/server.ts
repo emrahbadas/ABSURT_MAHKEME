@@ -19,9 +19,24 @@ export async function bootstrapServer() {
   app.get("/api/rooms/:roomCode/history", historyHandler);
 
   const httpServer = http.createServer(app);
+  // Web (localhost:3000) + Capacitor mobil uygulama origin'lerine izin ver.
+  // CORS_ORIGIN="*" verilirse tum origin'ler kabul edilir (test icin).
+  const corsOrigin =
+    config.corsOrigin === "*"
+      ? "*"
+      : Array.from(
+          new Set([
+            ...config.corsOrigin.split(",").map((value) => value.trim()).filter(Boolean),
+            "http://localhost:3000",
+            "http://localhost",
+            "https://localhost",
+            "capacitor://localhost"
+          ])
+        );
+
   const io = new SocketIOServer(httpServer, {
     cors: {
-      origin: config.corsOrigin
+      origin: corsOrigin
     }
   });
 
