@@ -1,0 +1,6 @@
+packages:
+  - apps/web
+  - apps/game-server
+  - packages/shared
+  - packages/db
+  - packages/safety

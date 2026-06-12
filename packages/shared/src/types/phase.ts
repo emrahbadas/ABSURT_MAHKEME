@@ -1,0 +1,15 @@
+export type RoundPhase =
+  | "lobby"
+  | "claim_summary"
+  | "lawyer_assignment"
+  | "roll_call_countdown"
+  | "roll_call"
+  | "court_preparing"
+  | "opening"
+  | "claim"
+  | "defense"
+  | "lawyer_comment"
+  | "judge_question"
+  | "final_words"
+  | "verdict"
+  | "summary";

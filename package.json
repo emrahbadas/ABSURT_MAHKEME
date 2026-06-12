@@ -1,0 +1,31 @@
+{
+  "name": "absurt-mahkeme",
+  "private": true,
+  "version": "1.0.0",
+  "packageManager": "pnpm@8.7.6",
+  "workspaces": [
+    "apps/web",
+    "apps/game-server",
+    "packages/shared",
+    "packages/db",
+    "packages/safety"
+  ],
+  "scripts": {
+    "dev": "pnpm --parallel --filter ./apps/web --filter ./apps/game-server dev",
+    "build": "pnpm --filter ./apps/web build && pnpm --filter ./apps/game-server build",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "lint": "pnpm -r --if-present lint",
+    "db:generate": "pnpm --filter db db:generate",
+    "db:migrate": "pnpm --filter db db:migrate",
+    "db:seed": "pnpm --filter db db:seed"
+  },
+  "devDependencies": {
+    "@types/babel__traverse": "^7.28.0",
+    "axe-core": "^4.8.2",
+    "drizzle-kit": "^0.31.10",
+    "playwright": "^1.44.1",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}

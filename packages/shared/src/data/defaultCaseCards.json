@@ -1,0 +1,14 @@
+[
+  {
+    "id": "card-1",
+    "content": "Son cips kirintisi kimin?",
+    "emoji": "🍟",
+    "weight": 2
+  },
+  {
+    "id": "card-2",
+    "content": "Kumanda mulkiyeti kime ait?",
+    "emoji": "📺",
+    "weight": 1
+  }
+]
